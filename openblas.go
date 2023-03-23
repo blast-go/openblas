@@ -242,6 +242,127 @@ func Izmin(n int, x []complex128, incx int) int {
 	return int(C.cblas_izmin(C.blasint(n), unsafe.Pointer(&x[0]), C.blasint(incx)))
 }
 
+// Saxpy adds a multiple of a single-precision vector to another single-precision vector.
+func Saxpy(n int, alpha float32, x []float32, incx int, y []float32, incy int) {
+	C.cblas_saxpy(C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incx), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Daxpy adds a multiple of a double-precision vector to another double-precision vector.
+func Daxpy(n int, alpha float64, x []float64, incx int, y []float64, incy int) {
+	C.cblas_daxpy(C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incx), (*C.double)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Caxpy adds a multiple of a complex single-precision vector to another complex single-precision vector.
+func Caxpy(n int, alpha complex64, x []complex64, incx int, y []complex64, incy int) {
+	C.cblas_caxpy(C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.blasint(incx), unsafe.Pointer(&y[0]), C.blasint(incy))
+}
+
+// Zaxpy adds a multiple of a complex double-precision vector to another complex double-precision vector.
+func Zaxpy(n int, alpha complex128, x []complex128, incx int, y []complex128, incy int) {
+	C.cblas_zaxpy(C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.blasint(incx), unsafe.Pointer(&y[0]), C.blasint(incy))
+}
+
+// Scopy copies a single-precision vector x to a single-precision vector y.
+func Scopy(n int, x []float32, incx int, y []float32, incy int) {
+	C.cblas_scopy(C.blasint(n), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incx), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Dcopy copies a double-precision vector x to a double-precision vector y.
+func Dcopy(n int, x []float64, incx int, y []float64, incy int) {
+	C.cblas_dcopy(C.blasint(n), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incx), (*C.double)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Ccopy copies a complex single-precision vector x to a complex single-precision vector y.
+func Ccopy(n int, x []complex64, incx int, y []complex64, incy int) {
+	C.cblas_ccopy(C.blasint(n), unsafe.Pointer(&x[0]), C.blasint(incx), unsafe.Pointer(&y[0]), C.blasint(incy))
+}
+
+// Zcopy copies a complex double-precision vector x to a complex double-precision vector y.
+func Zcopy(n int, x []complex128, incx int, y []complex128, incy int) {
+	C.cblas_zcopy(C.blasint(n), unsafe.Pointer(&x[0]), C.blasint(incx), unsafe.Pointer(&y[0]), C.blasint(incy))
+}
+
+// Sswap interchanges two single-precision vectors.
+func Sswap(n int, x []float32, incx int, y []float32, incy int) {
+	C.cblas_sswap(C.blasint(n), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incx), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Dswap interchanges two double-precision vectors.
+func Dswap(n int, x []float64, incx int, y []float64, incy int) {
+	C.cblas_dswap(C.blasint(n), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incx), (*C.double)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Cswap interchanges two complex single-precision vectors.
+func Cswap(n int, x []complex64, incx int, y []complex64, incy int) {
+	C.cblas_cswap(C.blasint(n), unsafe.Pointer(&x[0]), C.blasint(incx), unsafe.Pointer(&y[0]), C.blasint(incy))
+}
+
+// Zswap interchanges two complex double-precision vectors.
+func Zswap(n int, x []complex128, incx int, y []complex128, incy int) {
+	C.cblas_zswap(C.blasint(n), unsafe.Pointer(&x[0]), C.blasint(incx), unsafe.Pointer(&y[0]), C.blasint(incy))
+}
+
+// Srot applies a plane rotation to vectors x and y.
+func Srot(n int, x []float32, incX int, y []float32, incY int, c float32, s float32) {
+	C.cblas_srot(C.blasint(n), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incX), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incY), C.float(c), C.float(s))
+}
+
+// Drot applies a plane rotation to vectors x and y.
+func Drot(n int, x []float64, incX int, y []float64, incY int, c float64, s float64) {
+	C.cblas_drot(C.blasint(n), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incX), (*C.double)(unsafe.Pointer(&y[0])), C.blasint(incY), C.double(c), C.double(s))
+}
+
+// Csrot applies a plane rotation to complex single-precision vectors x and y.
+func Csrot(n int, x []complex64, incX int, y []complex64, incY int, c float32, s float32) {
+	//C.cblas_csrot(C.blasint(n), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&y[0]), C.blasint(incY), C.float(c), C.float(s))
+}
+
+// Zdrot applies a plane rotation to complex double-precision vectors x and y.
+func Zdrot(n int, x []complex128, incX int, y []complex128, incY int, c float64, s float64) {
+	//C.cblas_zdrot(C.blasint(n), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&y[0]), C.blasint(incY), C.double(c), C.double(s))
+}
+
+// cblas_srotg computes the parameters for a Givens rotation matrix.
+func Srotg(a *float32, b *float32, c *float32, s *float32) {
+	C.cblas_srotg((*C.float)(unsafe.Pointer(a)), (*C.float)(unsafe.Pointer(b)), (*C.float)(unsafe.Pointer(c)), (*C.float)(unsafe.Pointer(s)))
+}
+
+// cblas_drotg computes the parameters for a Givens rotation matrix.
+func Drotg(a *float64, b *float64, c *float64, s *float64) {
+	C.cblas_drotg((*C.double)(unsafe.Pointer(a)), (*C.double)(unsafe.Pointer(b)), (*C.double)(unsafe.Pointer(c)), (*C.double)(unsafe.Pointer(s)))
+}
+
+// cblas_crotg computes the parameters for a Givens rotation matrix.
+func Crotg(a *complex64, b *complex64, c *float32, s *complex64) {
+	//C.cblas_crotg(unsafe.Pointer(a), unsafe.Pointer(b), (*C.float)(unsafe.Pointer(c)), unsafe.Pointer(s))
+}
+
+// cblas_zrotg computes the parameters for a Givens rotation matrix.
+func Zrotg(a *complex128, b *complex128, c *float64, s *complex128) {
+	//C.cblas_zrotg(unsafe.Pointer(a), unsafe.Pointer(b), (*C.double)(unsafe.Pointer(c)), unsafe.Pointer(s))
+}
+
+// Rotates the points (X,Y) in the plane through the angle THETA.
+func Srotm(N int32, X []float32, incX int32, Y []float32, incY int32, P []float32) {
+	C.cblas_srotm(C.int(N), (*C.float)(&X[0]), C.int(incX), (*C.float)(&Y[0]), C.int(incY), (*C.float)(&P[0]))
+}
+
+// Rotates the points (X,Y) in the plane through the angle THETA.
+func Drotm(N int32, X []float64, incX int32, Y []float64, incY int32, P []float64) {
+	C.cblas_drotm(C.int(N), (*C.double)(&X[0]), C.int(incX), (*C.double)(&Y[0]), C.int(incY), (*C.double)(&P[0]))
+}
+
+// Given the scalars d1, d2, and b2, constructs the modified Givens transformation matrix H which zeros the second component of the 2-vector transpose(d1,d2)
+func Srotmg(d1, d2, b1 *float32, b2 float32, P []float32) {
+	C.cblas_srotmg((*C.float)(d1), (*C.float)(d2), (*C.float)(b1), C.float(b2), (*C.float)(&P[0]))
+}
+
+// Given the scalars d1, d2, and b2, constructs the modified Givens transformation matrix H which zeros the second component of the 2-vector transpose(d1,d2)
+func Drotmg(d1, d2, b1 *float64, b2 float64, P []float64) {
+	C.cblas_drotmg((*C.double)(d1), (*C.double)(d2), (*C.double)(b1), C.double(b2), (*C.double)(&P[0]))
+}
+
 func main() {
-	fmt.Println(GetConfig())
+	list := []float64{1.1, 10, 1, 2, 3, 4, 5}
+	fmt.Println(Idmin(len(list), list, 1))
 }
