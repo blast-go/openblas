@@ -5,7 +5,6 @@ package main
 #cgo CFLAGS: -I/usr/local/opt/openblas/include
 #cgo LDFLAGS: -L/usr/local/opt/openblas/lib -lopenblas
 #include "cblas.h"
-#include <stdlib.h>
 */
 import "C"
 import (
@@ -735,13 +734,227 @@ func Zhpmv(order Order, upLo UpLo, n int, alpha complex128, ap []complex128, x [
 }
 
 // Sgemm computes the matrix-matrix product where the matrices are
-func Sgemm(Order Order, TransA Transpose, TransB Transpose, m int, n int, k int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
-	C.cblas_sgemm(C.enum_CBLAS_ORDER(Order), C.enum_CBLAS_TRANSPOSE(TransA), C.enum_CBLAS_TRANSPOSE(TransB), C.blasint(m), C.blasint(n), C.blasint(k), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+func Sgemm(order Order, transA, transB Transpose, m, n, k int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
+	C.cblas_sgemm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_TRANSPOSE(transB), C.blasint(m), C.blasint(n), C.blasint(k), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
 }
 
 // Dgemm computes the matrix-matrix product where the matrices are
-func Dgemm(Order Order, TransA Transpose, TransB Transpose, m int, n int, k int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
-	C.cblas_dgemm(C.enum_CBLAS_ORDER(Order), C.enum_CBLAS_TRANSPOSE(TransA), C.enum_CBLAS_TRANSPOSE(TransB), C.blasint(m), C.blasint(n), C.blasint(k), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.double(beta), (*C.double)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+func Dgemm(order Order, transA, transB Transpose, m, n, k int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
+	C.cblas_dgemm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_TRANSPOSE(transB), C.blasint(m), C.blasint(n), C.blasint(k), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.double(beta), (*C.double)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Cgemm performs matrix-matrix multiplication with complex single-precision matrix A and matrix B and stores the result in matrix C.
+func Cgemm(order Order, transA, transB Transpose, m, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
+	C.cblas_cgemm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_TRANSPOSE(transB), C.blasint(m), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Cgemm3m performs matrix-matrix multiplication with complex single-precision matrix A and matrix B and stores the result in matrix C.
+func Cgemm3m(order Order, transA, transB Transpose, m, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
+	C.cblas_cgemm3m(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_TRANSPOSE(transB), C.blasint(m), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Zgemm performs matrix-matrix multiplication with complex double-precision matrix A and matrix B and stores the result in matrix C.
+func Zgemm(order Order, transA, transB Transpose, m, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
+	C.cblas_zgemm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_TRANSPOSE(transB), C.blasint(m), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Zgemm3m performs matrix-matrix multiplication with complex double-precision matrix A and matrix B and stores the result in matrix C.
+func Zgemm3m(order Order, transA, transB Transpose, m, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
+	C.cblas_zgemm3m(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_TRANSPOSE(transB), C.blasint(m), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Ssymm multiplies symmetric matrix A by matrix B and scales the result by beta, and accumulates the result into matrix C.
+func Ssymm(order Order, side Side, upLo UpLo, m, n int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
+	C.cblas_ssymm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.blasint(m), C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Dsymm multiplies symmetric matrix A by matrix B and scales the result by beta, and accumulates the result into matrix C.
+func Dsymm(order Order, side Side, upLo UpLo, m, n int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
+	C.cblas_dsymm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.blasint(m), C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.double(beta), (*C.double)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Csymm multiplies symmetric matrix A by matrix B and scales the result by beta, and accumulates the result into matrix C.
+func Csymm(order Order, side Side, upLo UpLo, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
+	C.cblas_csymm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.blasint(m), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Zsymm multiplies symmetric matrix A by matrix B and scales the result by beta, and accumulates the result into matrix C.
+func Zsymm(order Order, side Side, upLo UpLo, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
+	C.cblas_zsymm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.blasint(m), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Ssyrk performs a symmetric rank-k operation on a float matrix.
+func Ssyrk(order Order, upLo UpLo, trans Transpose, n, k int, alpha float32, a []float32, lda int, beta float32, c []float32, ldc int) {
+	C.cblas_ssyrk(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Dsyrk performs a symmetric rank-k operation on a double matrix.
+func Dsyrk(order Order, upLo UpLo, trans Transpose, n, k int, alpha float64, a []float64, lda int, beta float64, c []float64, ldc int) {
+	C.cblas_dsyrk(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), C.double(beta), (*C.double)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Csyrk performs a symmetric rank-k operation on a complex float matrix.
+func Csyrk(order Order, upLo UpLo, trans Transpose, n, k int, alpha complex64, a []complex64, lda int, beta complex64, c []complex64, ldc int) {
+	C.cblas_csyrk(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Zsyrk performs a symmetric rank-k operation on a complex double matrix.
+func Zsyrk(order Order, upLo UpLo, trans Transpose, n, k int, alpha complex128, a []complex128, lda int, beta complex128, c []complex128, ldc int) {
+	C.cblas_zsyrk(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Ssyr2k performs symmetric rank-2k update of a real symmetric matrix. C := alpha * A * B^T + alpha * B * A^T + beta * C
+func Ssyr2k(order Order, upLo UpLo, trans Transpose, n, k int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
+	C.cblas_ssyr2k(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Dsyr2k performs symmetric rank-2k update of a real symmetric matrix. C := alpha * A * B^T + alpha * B * A^T + beta * C
+func Dsyr2k(order Order, upLo UpLo, trans Transpose, n, k int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
+	C.cblas_dsyr2k(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.double(beta), (*C.double)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Csyr2k performs symmetric rank-2k update of a real symmetric matrix. C := alpha * A * B^T + alpha * B * A^T + beta * C
+func Csyr2k(order Order, upLo UpLo, trans Transpose, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
+	C.cblas_csyr2k(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Zsyr2k performs symmetric rank-2k update of a real symmetric matrix. C := alpha * A * B^T + alpha * B * A^T + beta * C
+func Zsyr2k(order Order, upLo UpLo, trans Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
+	C.cblas_zsyr2k(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Strmm performs a matrix-matrix operation with a triangular matrix.
+func Strmm(order Order, side Side, upLo UpLo, transA Transpose, diag Diag, m, n int, alpha float32, a []float32, lda int, b []float32, ldb int) {
+	C.cblas_strmm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_DIAG(diag), C.blasint(m), C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&b[0])), C.blasint(ldb))
+}
+
+// Dtrmm performs a matrix-matrix operation with a triangular matrix.
+func Dtrmm(order Order, side Side, upLo UpLo, transA Transpose, diag Diag, m, n int, alpha float64, a []float64, lda int, b []float64, ldb int) {
+	C.cblas_dtrmm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_DIAG(diag), C.blasint(m), C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&b[0])), C.blasint(ldb))
+}
+
+// Ctrmm performs a matrix-matrix operation with a triangular matrix.
+func Ctrmm(order Order, side Side, upLo UpLo, transA Transpose, diag Diag, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int) {
+	C.cblas_ctrmm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_DIAG(diag), C.blasint(m), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb))
+}
+
+// Ztrmm performs a matrix-matrix operation with a triangular matrix.
+func Ztrmm(order Order, side Side, upLo UpLo, transA Transpose, diag Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
+	C.cblas_ztrmm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_DIAG(diag), C.blasint(m), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb))
+}
+
+// Strsm solves a triangular system of equations with multiple values for the right side.
+func Strsm(order Order, side Side, upLo UpLo, transA Transpose, diag Diag, m, n int, alpha float32, a []float32, lda int, b []float32, ldb int) {
+	C.cblas_strsm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_DIAG(diag), C.blasint(m), C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&b[0])), C.blasint(ldb))
+}
+
+// Dtrsm solves a triangular system of equations with multiple values for the right side.
+func Dtrsm(order Order, side Side, upLo UpLo, transA Transpose, diag Diag, m, n int, alpha float64, a []float64, lda int, b []float64, ldb int) {
+	C.cblas_dtrsm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_DIAG(diag), C.blasint(m), C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&b[0])), C.blasint(ldb))
+}
+
+// Ctrsm solves a triangular system of equations with multiple values for the right side.
+func Ctrsm(order Order, side Side, upLo UpLo, transA Transpose, diag Diag, m, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int) {
+	C.cblas_ctrsm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_DIAG(diag), C.blasint(m), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb))
+}
+
+// Ztrsm solves a triangular system of equations with multiple values for the right side.
+func Ztrsm(order Order, side Side, upLo UpLo, transA Transpose, diag Diag, m, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
+	C.cblas_ztrsm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_DIAG(diag), C.blasint(m), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb))
+}
+
+// Multiply a Hermitian matrix with a general matrix. C = alpha * A * B + beta * C
+func Chemm(order Order, side Side, upLo UpLo, m int, n int, alpha complex64, a []complex64, lda int, b []complex64, ldb int, beta complex64, c []complex64, ldc int) {
+	C.cblas_chemm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.blasint(m), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Multiply a Hermitian matrix with a general matrix. C = alpha * A * B + beta * C
+func Zhemm(order Order, side Side, upLo UpLo, m int, n int, alpha complex128, a []complex128, lda int, b []complex128, ldb int, beta complex128, c []complex128, ldc int) {
+	C.cblas_zhemm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_SIDE(side), C.enum_CBLAS_UPLO(upLo), C.blasint(m), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Cherk performs a Hermitian rank-k update.
+func Cherk(order Order, upLo UpLo, trans Transpose, n, k int, alpha float32, a []complex64, lda int, beta float32, c []complex64, ldc int) {
+	C.cblas_cherk(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), C.float(alpha), unsafe.Pointer(&a[0]), C.blasint(lda), C.float(beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Zherk performs a Hermitian rank-k update.
+func Zherk(order Order, upLo UpLo, trans Transpose, n, k int, alpha float64, a []complex128, lda int, beta float64, c []complex128, ldc int) {
+	C.cblas_zherk(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), C.double(alpha), unsafe.Pointer(&a[0]), C.blasint(lda), C.double(beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Cher2k performs a Hermitian rank-2k update.
+func Cher2k(order Order, upLo UpLo, trans Transpose, n, k int, alpha complex64, a []complex64, lda int, b []complex64, ldb C.int, beta float32, c []complex64, ldc int) {
+	C.cblas_cher2k(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), C.float(beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Zher2k performs a Hermitian rank-2k update.
+func Zher2k(order Order, upLo UpLo, trans Transpose, n, k int, alpha complex128, a []complex128, lda int, b []complex128, ldb C.int, beta float64, c []complex128, ldc int) {
+	C.cblas_zher2k(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb), C.double(beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Saxpby computes y := alpha*x + beta*y for float arrays x and y.
+func Saxpby(n int, alpha float32, x []float32, incx int, beta float32, y []float32, incy int) {
+	C.cblas_saxpby(C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incx), C.float(beta), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Daxpby computes y := alpha*x + beta*y for double arrays x and y.
+func Daxpby(n int, alpha float64, x []float64, incx int, beta float64, y []float64, incy int) {
+	C.cblas_daxpby(C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incx), C.double(beta), (*C.double)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Caxpby computes y := alpha*x + beta*y for complex float arrays x and y.
+func Caxpby(n int, alpha complex64, x []complex64, incx int, beta complex64, y []complex64, incy int) {
+	C.cblas_caxpby(C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.blasint(incx), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.blasint(incy))
+}
+
+// Zaxpby computes y := alpha*x + beta*y for complex double arrays x and y.
+func Zaxpby(n int, alpha complex128, x []complex128, incx int, beta complex128, y []complex128, incy int) {
+	C.cblas_zaxpby(C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.blasint(incx), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.blasint(incy))
+}
+
+// SomatCopy performs scaling and out-place transposition/copying of matrices.
+func SomatCopy(order Order, trans Transpose, rows, cols int, alpha float32, a []float32, lda int, b []float32, ldb int) {
+	C.cblas_somatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&b[0])), C.blasint(ldb))
+}
+
+// DomatCopy performs scaling and out-place transposition/copying of matrices.
+func DomatCopy(order Order, trans Transpose, rows, cols int, alpha float64, a []float64, lda int, b []float64, ldb int) {
+	C.cblas_domatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&b[0])), C.blasint(ldb))
+}
+
+// ComatCopy performs scaling and out-place transposition/copying of matrices.
+func ComatCopy(order Order, trans Transpose, rows, cols int, alpha complex64, a []complex64, lda int, b []complex64, ldb int) {
+	// FIXME: I think cblast.h has the incorrect definition
+	//C.cblas_comatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb))
+}
+
+// ZomatCopy performs scaling and out-place transposition/copying of matrices.
+func ZomatCopy(order Order, trans Transpose, rows, cols int, alpha complex128, a []complex128, lda int, b []complex128, ldb int) {
+	// FIXME: I think cblast.h has the incorrect definition
+	//C.cblas_zomatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&b[0]), C.blasint(ldb))
+}
+
+// SimatCopy performs scaling and in-place transposition/copying of matrices.
+func SimatCopy(order Order, trans Transpose, rows, cols int, alpha float32, a []float32, lda int, ldb int) {
+	C.cblas_simatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), C.blasint(ldb))
+}
+
+// DimatCopy performs scaling and in-place transposition/copying of matrices.
+func DimatCopy(order Order, trans Transpose, rows, cols int, alpha float64, a []float64, lda int, ldb int) {
+	C.cblas_dimatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), C.blasint(ldb))
+}
+
+// CimatCopy performs scaling and in-place transposition/copying of matrices.
+func CimatCopy(order Order, trans Transpose, rows, cols int, alpha complex64, a []complex64, lda int, ldb int) {
+	// FIXME: I think cblast.h has the incorrect definition
+	//C.cblas_cimatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), C.blasint(ldb))
+}
+
+// ZimatCopy performs scaling and in-place transposition/copying of matrices.
+func ZimatCopy(order Order, trans Transpose, rows, cols int, alpha complex128, a []complex128, lda int, ldb int) {
+	// FIXME: I think cblast.h has the incorrect definition
+	//C.cblas_zimatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), C.blasint(ldb))
 }
 
 func main() {
