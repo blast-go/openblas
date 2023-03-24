@@ -1,14 +1,13 @@
 // MIT
-package main
+package openblas
 
 /*
-#cgo CFLAGS: -I/usr/local/opt/openblas/include
-#cgo LDFLAGS: -L/usr/local/opt/openblas/lib -lopenblas
+#cgo darwin CFLAGS: -I/usr/local/opt/openblas/include
+#cgo darwin LDFLAGS: -L/usr/local/opt/openblas/lib -lopenblas
 #include "cblas.h"
 */
 import "C"
 import (
-	"fmt"
 	"unsafe"
 )
 
@@ -1022,9 +1021,4 @@ func SbGemv(order Order, trans Transpose, m, n int, alpha float32, a []Bfloat16,
 func SbGemM(order Order, transA, transB Transpose, m, n, k int, alpha float32, a []Bfloat16, lda int, b []Bfloat16, ldb int, beta float32, c []float32, ldc int) {
 	// FIXME: No symbol
 	//C.cblas_sbgemm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_TRANSPOSE(transB), C.blasint(m), C.blasint(n), C.blasint(k), C.float(alpha), (*C.bfloat16)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.bfloat16)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
-}
-
-func main() {
-	list := []float64{1.1, 10, 1, 2, 3, 4, 5}
-	fmt.Println(Idmin(len(list), list, 1))
 }
