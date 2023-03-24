@@ -644,6 +644,106 @@ func Ztpsv(order Order, upLo UpLo, trans Transpose, diag Diag, n int, ap []compl
 		C.blasint(n), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.blasint(incX))
 }
 
+// Ssymv computes y := alpha*A*x + beta*y for real symmetric matrix A
+func Ssymv(order Order, upLo UpLo, n int, alpha float32, a []float32, lda int, x []float32, incX int, beta float32, y []float32, incY int) {
+	C.cblas_ssymv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incX), C.float(beta), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incY))
+}
+
+// Dsymv computes y := alpha*A*x + beta*y for real symmetric matrix A
+func Dsymv(order Order, upLo UpLo, n int, alpha float64, a []float64, lda int, x []float64, incX int, beta float64, y []float64, incY int) {
+	C.cblas_dsymv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incX), C.double(beta), (*C.double)(unsafe.Pointer(&y[0])), C.blasint(incY))
+}
+
+// Chemv computes y := alpha*A*x + beta*y for complex Hermitian matrix A
+func Chemv(order Order, upLo UpLo, n int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
+	C.cblas_chemv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.blasint(incY))
+}
+
+// Zhemv computes y := alpha*A*x + beta*y for complex Hermitian matrix A
+func Zhemv(order Order, upLo UpLo, n int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
+	C.cblas_zhemv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.blasint(incY))
+}
+
+// Sspmv performs a symmetric packed matrix-vector multiplication.
+func Sspmv(order Order, upLo UpLo, n int, alpha float32, ap []float32, x []float32, incX int, beta float32, y []float32, incY int) {
+	C.cblas_sspmv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&ap[0])), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incX), C.float(beta), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incY))
+}
+
+// Dspmv performs a symmetric packed matrix-vector multiplication.
+func Dspmv(order Order, upLo UpLo, n int, alpha float64, ap []float64, x []float64, incX int, beta float64, y []float64, incY int) {
+	C.cblas_dspmv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&ap[0])), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incX), C.double(beta), (*C.double)(unsafe.Pointer(&y[0])), C.blasint(incY))
+}
+
+// Sspr Perform a symmetric rank-1 update of a symmetric packed matrix with a real symmetric vector
+func Sspr(order Order, upLo UpLo, n int, alpha float32, x []float32, incX int, ap []float32) {
+	C.cblas_sspr(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incX), (*C.float)(unsafe.Pointer(&ap[0])))
+}
+
+// Dspr Perform a symmetric rank-1 update of a symmetric packed matrix with a real symmetric vector
+func Dspr(order Order, upLo UpLo, n int, alpha float64, x []float64, incX int, ap []float64) {
+	C.cblas_dspr(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incX), (*C.double)(unsafe.Pointer(&ap[0])))
+}
+
+// Chpr Perform a Hermitian rank-1 update of a Hermitian packed matrix with a complex Hermitian vector
+func Chpr(order Order, upLo UpLo, n int, alpha float32, x []complex64, incX int, ap []complex64) {
+	C.cblas_chpr(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.float(alpha), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&ap[0]))
+}
+
+// Zhpr Perform a Hermitian rank-1 update of a Hermitian packed matrix with a complex Hermitian vector
+func Zhpr(order Order, upLo UpLo, n int, alpha float64, x []complex128, incX int, ap []complex128) {
+	C.cblas_zhpr(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.double(alpha), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&ap[0]))
+}
+
+// Sspr2 computes the symmetric rank 2 operation A := alpha*x*y**T + alpha*y*x**T + A,
+func Sspr2(order Order, upLo UpLo, n int, alpha float32, x []float32, incX int, y []float32, incY int, ap []float32) {
+	C.cblas_sspr2(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.float(alpha), (*C.float)(unsafe.Pointer(&x[0])), C.blasint(incX), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incY), (*C.float)(unsafe.Pointer(&ap[0])))
+}
+
+// Dspr2 computes the symmetric rank 2 operation A := alpha*x*y**T + alpha*y*x**T + A,
+func Dspr2(order Order, upLo UpLo, n int, alpha float64, x []float64, incX int, y []float64, incY int, ap []float64) {
+	C.cblas_dspr2(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.double(alpha), (*C.double)(unsafe.Pointer(&x[0])), C.blasint(incX), (*C.double)(unsafe.Pointer(&y[0])), C.blasint(incY), (*C.double)(unsafe.Pointer(&ap[0])))
+}
+
+// Chpr2 performs the Hermitian rank 2 operation A := alpha*x*y**H + conjg(alpha)*y*x**H + A,
+func Chpr2(order Order, upLo UpLo, n int, alpha complex64, x []complex64, incX int, y []complex64, incY int, ap []complex64) {
+	C.cblas_chpr2(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&y[0]), C.blasint(incY), unsafe.Pointer(&ap[0]))
+}
+
+// Zhpr2 performs the Hermitian rank 2 operation A := alpha*x*y**H + conjg(alpha)*y*x**H + A,
+func Zhpr2(order Order, upLo UpLo, n int, alpha complex128, x []complex128, incX int, y []complex128, incY int, ap []complex128) {
+	C.cblas_zhpr2(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&y[0]), C.blasint(incY), unsafe.Pointer(&ap[0]))
+}
+
+// CHbmv performs the matrix-vector operation: y = alpha*A*x + beta*y.
+func Chbmv(order Order, upLo UpLo, n, k int, alpha complex64, a []complex64, lda int, x []complex64, incX int, beta complex64, y []complex64, incY int) {
+	C.cblas_chbmv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.blasint(incY))
+}
+
+// ZHbmv performs the matrix-vector operation: y = alpha*A*x + beta*y.
+func Zhbmv(order Order, upLo UpLo, n, k int, alpha complex128, a []complex128, lda int, x []complex128, incX int, beta complex128, y []complex128, incY int) {
+	C.cblas_zhbmv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), C.blasint(k), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.blasint(incY))
+}
+
+// CHpmv performs the matrix-vector operation: y = alpha*A*x + beta*y.
+func Chpmv(order Order, upLo UpLo, n int, alpha complex64, ap []complex64, x []complex64, incX int, beta complex64, y []complex64, incY int) {
+	C.cblas_chpmv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.blasint(incY))
+}
+
+// ZHpmv performs the matrix-vector operation: y = alpha*A*x + beta*y.
+func Zhpmv(order Order, upLo UpLo, n int, alpha complex128, ap []complex128, x []complex128, incX int, beta complex128, y []complex128, incY int) {
+	C.cblas_zhpmv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_UPLO(upLo), C.blasint(n), unsafe.Pointer(&alpha), unsafe.Pointer(&ap[0]), unsafe.Pointer(&x[0]), C.blasint(incX), unsafe.Pointer(&beta), unsafe.Pointer(&y[0]), C.blasint(incY))
+}
+
+// Sgemm computes the matrix-matrix product where the matrices are
+func Sgemm(Order Order, TransA Transpose, TransB Transpose, m int, n int, k int, alpha float32, a []float32, lda int, b []float32, ldb int, beta float32, c []float32, ldc int) {
+	C.cblas_sgemm(C.enum_CBLAS_ORDER(Order), C.enum_CBLAS_TRANSPOSE(TransA), C.enum_CBLAS_TRANSPOSE(TransB), C.blasint(m), C.blasint(n), C.blasint(k), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.float)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Dgemm computes the matrix-matrix product where the matrices are
+func Dgemm(Order Order, TransA Transpose, TransB Transpose, m int, n int, k int, alpha float64, a []float64, lda int, b []float64, ldb int, beta float64, c []float64, ldc int) {
+	C.cblas_dgemm(C.enum_CBLAS_ORDER(Order), C.enum_CBLAS_TRANSPOSE(TransA), C.enum_CBLAS_TRANSPOSE(TransB), C.blasint(m), C.blasint(n), C.blasint(k), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.double)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.double(beta), (*C.double)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
 func main() {
 	list := []float64{1.1, 10, 1, 2, 3, 4, 5}
 	fmt.Println(Idmin(len(list), list, 1))
