@@ -55,3 +55,5 @@ const (
 )
 
 type Layout int32
+
+type Bfloat16 uint16
