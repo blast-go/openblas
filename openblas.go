@@ -333,11 +333,13 @@ func Drotg(a *float64, b *float64, c *float64, s *float64) {
 
 // cblas_crotg computes the parameters for a Givens rotation matrix.
 func Crotg(a *complex64, b *complex64, c *float32, s *complex64) {
+	// FIXME: No symbol
 	//C.cblas_crotg(unsafe.Pointer(a), unsafe.Pointer(b), (*C.float)(unsafe.Pointer(c)), unsafe.Pointer(s))
 }
 
 // cblas_zrotg computes the parameters for a Givens rotation matrix.
 func Zrotg(a *complex128, b *complex128, c *float64, s *complex128) {
+	// FIXME: No symbol
 	//C.cblas_zrotg(unsafe.Pointer(a), unsafe.Pointer(b), (*C.double)(unsafe.Pointer(c)), unsafe.Pointer(s))
 }
 
@@ -955,6 +957,71 @@ func CimatCopy(order Order, trans Transpose, rows, cols int, alpha complex64, a 
 func ZimatCopy(order Order, trans Transpose, rows, cols int, alpha complex128, a []complex128, lda int, ldb int) {
 	// FIXME: I think cblast.h has the incorrect definition
 	//C.cblas_zimatcopy(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(rows), C.blasint(cols), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), C.blasint(ldb))
+}
+
+// Sgeadd adds a matrix A to a matrix C with scalar alpha and beta.
+func Sgeadd(order Order, rows, cols int, alpha float32, a []float32, lda int, beta float32, c []float32, ldc int) {
+	C.cblas_sgeadd(C.enum_CBLAS_ORDER(order), C.blasint(rows), C.blasint(cols), C.float(alpha), (*C.float)(unsafe.Pointer(&a[0])), C.blasint(lda), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Dgeadd adds a matrix A to a matrix C with scalar alpha and beta.
+func Dgeadd(order Order, rows, cols int, alpha float64, a []float64, lda int, beta float64, c []float64, ldc int) {
+	C.cblas_dgeadd(C.enum_CBLAS_ORDER(order), C.blasint(rows), C.blasint(cols), C.double(alpha), (*C.double)(unsafe.Pointer(&a[0])), C.blasint(lda), C.double(beta), (*C.double)(unsafe.Pointer(&c[0])), C.blasint(ldc))
+}
+
+// Cgeadd adds a matrix A to a matrix C with complex scalar alpha and beta.
+func Cgeadd(order Order, rows, cols int, alpha complex64, a []complex64, lda int, beta complex64, c []complex64, ldc int) {
+	// FIXME: I think cblast.h has the incorrect definition
+	//C.cblas_cgeadd(C.enum_CBLAS_ORDER(order), C.blasint(rows), C.blasint(cols), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Zgeadd adds a matrix A to a matrix C with complex scalar alpha and beta.
+func Zgeadd(order Order, rows, cols int, alpha complex128, a []complex128, lda int, beta complex128, c []complex128, ldc int) {
+	// FIXME: I think cblast.h has the incorrect definition
+	//C.cblas_zgeadd(C.enum_CBLAS_ORDER(order), C.blasint(rows), C.blasint(cols), unsafe.Pointer(&alpha), unsafe.Pointer(&a[0]), C.blasint(lda), unsafe.Pointer(&beta), unsafe.Pointer(&c[0]), C.blasint(ldc))
+}
+
+// Convert float array to bfloat16 array by rounding
+func SbstoBf16(n int, in []float32, incIn int, out []Bfloat16, incOut int) {
+	// FIXME: No symbol
+	//C.cblas_sbstobf16(C.blasint(n), (*C.float)(unsafe.Pointer(&in[0])), C.blasint(incIn), (*C.bfloat16)(unsafe.Pointer(&out[0])), C.blasint(incOut))
+}
+
+// Convert double array to bfloat16 array by rounding
+func DbtoBf16(n int, in []float64, incIn int, out []Bfloat16, incOut int) {
+	// FIXME: No symbol
+	//C.cblas_sbdtobf16(C.blasint(n), (*C.double)(unsafe.Pointer(&in[0])), C.blasint(incIn), (*C.bfloat16)(unsafe.Pointer(&out[0])), C.blasint(incOut))
+}
+
+// Convert bfloat16 array to float array
+func Bf16toS(n int, in []Bfloat16, incIn int, out []float32, incOut int) {
+	// FIXME: No symbol
+	//C.cblas_sbf16tos(C.blasint(n), (*C.bfloat16)(unsafe.Pointer(&in[0])), C.blasint(incIn), (*C.float)(unsafe.Pointer(&out[0])), C.blasint(incOut))
+}
+
+// Convert bfloat16 array to double array
+func Bf16toD(n int, in []Bfloat16, incIn int, out []float64, incOut int) {
+	// FIXME: No symbol
+	//C.cblas_dbf16tod(C.blasint(n), (*C.bfloat16)(unsafe.Pointer(&in[0])), C.blasint(incIn), (*C.double)(unsafe.Pointer(&out[0])), C.blasint(incOut))
+}
+
+// Compute the dot product of two bfloat16 vectors
+func SbDot(n int, x []Bfloat16, incx int, y []Bfloat16, incy int) float32 {
+	// FIXME: No symbol
+	//return float32(C.cblas_sbdot(C.blasint(n), (*C.bfloat16)(unsafe.Pointer(&x[0])), C.blasint(incx), (*C.bfloat16)(unsafe.Pointer(&y[0])), C.blasint(incy)))
+	return float32(0)
+}
+
+// Performs a matrix-vector multiplication with a bfloat16 matrix and a float vector
+func SbGemv(order Order, trans Transpose, m, n int, alpha float32, a []Bfloat16, lda int, x []Bfloat16, incx int, beta float32, y []float32, incy int) {
+	// FIXME: No symbol
+	//C.cblas_sbgemv(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(trans), C.blasint(m), C.blasint(n), C.float(alpha), (*C.bfloat16)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.bfloat16)(unsafe.Pointer(&x[0])), C.blasint(incx), C.float(beta), (*C.float)(unsafe.Pointer(&y[0])), C.blasint(incy))
+}
+
+// Performs a matrix-matrix multiplication with bfloat16 matrices and a float output matrix
+func SbGemM(order Order, transA, transB Transpose, m, n, k int, alpha float32, a []Bfloat16, lda int, b []Bfloat16, ldb int, beta float32, c []float32, ldc int) {
+	// FIXME: No symbol
+	//C.cblas_sbgemm(C.enum_CBLAS_ORDER(order), C.enum_CBLAS_TRANSPOSE(transA), C.enum_CBLAS_TRANSPOSE(transB), C.blasint(m), C.blasint(n), C.blasint(k), C.float(alpha), (*C.bfloat16)(unsafe.Pointer(&a[0])), C.blasint(lda), (*C.bfloat16)(unsafe.Pointer(&b[0])), C.blasint(ldb), C.float(beta), (*C.float)(unsafe.Pointer(&c[0])), C.blasint(ldc))
 }
 
 func main() {
